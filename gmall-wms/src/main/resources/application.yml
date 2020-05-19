@@ -1,7 +1,5 @@
 server:
-  port: 18081
-# springcloud: nacos sentinel zipkin
-# springboot: \u6570\u636E\u6E90 redis\u5730\u5740
+  port: 18083
 spring:
   cloud:
     nacos:
@@ -21,7 +19,7 @@ spring:
       probability: 1
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.16.116.100:3306/guli_pms
+    url: jdbc:mysql://172.16.116.100:3306/guli_wms
     username: root
     password: root
   redis:
@@ -29,13 +27,9 @@ spring:
 feign:
   sentinel:
     enabled: true
-# mybatis-plus\uFF1A\u6620\u5C04\u6587\u4EF6 \u522B\u540D\u626B\u63CF id\u7B56\u7565
 mybatis-plus:
-  mapper-locations: classpath:mapper/pms/**/*.xml
-  type-aliases-package: com.atguigu.gmall.pms.entity
+  mapper-locations: classpath:mapper/wms/**/*.xml
+  type-aliases-package: com.atguigu.gmall.wms.entity
   global-config:
     db-config:
       id-type: auto
-logging:
-  level:
-    com.atguigu.gmall: debug
