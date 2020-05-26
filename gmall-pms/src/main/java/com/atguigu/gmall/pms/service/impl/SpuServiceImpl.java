@@ -120,7 +120,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         // 2. 保存sku相关信息
         saveSku(spuVo, spuId);
 
-        int i = 1/0;
+//        int i = 1/0;
     }
 
     private void saveSku(SpuVo spuVo, Long spuId) {

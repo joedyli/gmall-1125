@@ -25,6 +25,11 @@
         </dependency>
         <dependency>
             <groupId>com.atguigu</groupId>
+            <artifactId>gmall-pms-interface</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
             <artifactId>gmall-sms-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -78,7 +83,7 @@
         <dependency>
             <groupId>io.seata</groupId>
             <artifactId>seata-all</artifactId>
-            <version>1.0.0</version>
+            <version>1.2.0</version>
         </dependency>
 
         <dependency>

@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.gmall.pms.mapper.SkuAttrValueMapper">
 
+    <select id="querySkuAttrValuesBySkuId" resultType="SkuAttrValueEntity">
+        select a.* from pms_sku_attr_value a INNER JOIN pms_attr b on a.attr_id=b.id where a.sku_id=#{skuId} and b.search_type=1
+    </select>
 </mapper>
