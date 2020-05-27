@@ -20,6 +20,8 @@ spring:
   elasticsearch:
     rest:
       uris: http://172.16.116.100:9200
+  jackson:
+    default-property-inclusion: non_null # json序列化时不包含为null的字段
 feign:
   sentinel:
     enabled: true

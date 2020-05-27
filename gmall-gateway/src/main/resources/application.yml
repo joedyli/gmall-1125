@@ -24,10 +24,10 @@ spring:
           uri: lb://oms-service
           predicates:
             - Path=/oms/**
-        - id: search-route
+        - id: search-route # Host可以根据域名判断请求是否进入该路由
           uri: lb://search-service
           predicates:
-            - Host=search.gmall.com  # Host可以根据域名判断请求是否进入该路由
+            - Host=search.gmall.com
     nacos:
       discovery:
         server-addr: localhost:8848
