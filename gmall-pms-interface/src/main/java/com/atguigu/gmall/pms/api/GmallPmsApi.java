@@ -60,4 +60,23 @@ public interface GmallPmsApi {
      */
     @GetMapping("pms/spuattrvalue/spu/{spuId}")
     public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValuesBySpuId(@PathVariable("spuId")Long spuId);
+
+    /**
+     * 根据spuId查询spu
+     * @param id
+     * @return
+     */
+    @GetMapping("pms/spu/{id}")
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
+    /**
+     * 根据父id查询子分类
+     * @param pid
+     * @return
+     */
+    @GetMapping("pms/category/parent/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid);
+
+    @GetMapping("pms/category/parent/with/subs/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesWithSubByPid(@PathVariable("parentId")Long pid);
 }

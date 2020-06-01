@@ -28,6 +28,16 @@ spring:
           uri: lb://search-service
           predicates:
             - Host=search.gmall.com
+        - id: index-route1 # 同步跳转后台服务
+          uri: lb://index-service
+          predicates:
+            - Host=www.gmall.com, gmall.com
+          #  - Path=/index/**  如果写在这里，两个断言之间是and关系
+        - id: index-route2 # 异步获取数据的路由
+          uri: lb://index-service
+          predicates:
+            - Path=/index/**
+
     nacos:
       discovery:
         server-addr: localhost:8848
