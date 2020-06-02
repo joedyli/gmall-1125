@@ -34,4 +34,39 @@ public class indexController {
         List<CategoryEntity> categoryEntities = this.indexService.queryLvl2CategoriesWithSubs(pid);
         return ResponseVo.ok(categoryEntities);
     }
+
+    @GetMapping("/index/test/lock")
+    @ResponseBody
+    public ResponseVo<Object> testLock(){
+        this.indexService.testLock();
+        return ResponseVo.ok();
+    }
+
+    @GetMapping("/index/test/read")
+    @ResponseBody
+    public ResponseVo<Object> testRead(){
+        String msg = this.indexService.testRead();
+        return ResponseVo.ok(msg);
+    }
+
+    @GetMapping("/index/test/write")
+    @ResponseBody
+    public ResponseVo<Object> testWrite(){
+        String msg = this.indexService.testWrite();
+        return ResponseVo.ok(msg);
+    }
+
+    @GetMapping("/index/test/latch")
+    @ResponseBody
+    public ResponseVo<Object> testLatch() throws InterruptedException {
+        String msg = this.indexService.testLatch();
+        return ResponseVo.ok(msg);
+    }
+
+    @GetMapping("/index/test/countDown")
+    @ResponseBody
+    public ResponseVo<Object> testCountDown(){
+        String msg = this.indexService.testCountDown();
+        return ResponseVo.ok(msg);
+    }
 }
