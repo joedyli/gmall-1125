@@ -37,7 +37,10 @@ spring:
           uri: lb://index-service
           predicates:
             - Path=/index/**
-
+        - id: item-route # 异步获取数据的路由
+          uri: lb://item-service
+          predicates:
+            - Path=/item/**
     nacos:
       discovery:
         server-addr: localhost:8848

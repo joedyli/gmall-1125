@@ -10,7 +10,7 @@ import java.util.List;
 public interface GmallWmsApi {
 
     /**
-     * 根据库存id查询库存信息
+     * 根据skuid查询库存信息
      * @param skuId
      * @return
      */

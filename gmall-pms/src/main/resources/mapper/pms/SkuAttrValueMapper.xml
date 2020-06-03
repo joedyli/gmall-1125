@@ -5,4 +5,16 @@
     <select id="querySkuAttrValuesBySkuId" resultType="SkuAttrValueEntity">
         select a.* from pms_sku_attr_value a INNER JOIN pms_attr b on a.attr_id=b.id where a.sku_id=#{skuId} and b.search_type=1
     </select>
+
+    <select id="querySaleAttrValuesBySpuId" resultType="SkuAttrValueEntity">
+        select a.* from pms_sku_attr_value a INNER JOIN pms_sku b on a.sku_id=b.id where b.spu_id=#{spuId}
+    </select>
+
+    <select id="querySkuJsonsBySpuId" resultType="Map">
+        select GROUP_CONCAT(a.attr_value) as attr_values,a.sku_id from pms_sku_attr_value a INNER JOIN pms_sku b on a.sku_id=b.id where b.spu_id=#{spuId} GROUP BY a.sku_id
+    </select>
+
+    <select id="querySkuAttrValuesBySkuIdAndGid" resultType="SkuAttrValueEntity">
+        select b.* from pms_attr a INNER JOIN pms_sku_attr_value b on a.id=b.attr_id where b.sku_id=#{skuId} and a.group_id=#{groupId}
+    </select>
 </mapper>

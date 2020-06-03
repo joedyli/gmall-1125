@@ -5,4 +5,8 @@
     <select id="querySpuAttrValuesBySpuId" resultType="SpuAttrValueEntity">
         select a.* from pms_spu_attr_value a INNER JOIN pms_attr b on a.attr_id=b.id where a.spu_id=#{spuId} and b.search_type=1;
     </select>
+
+    <select id="querySpuAttrValuesBySpuIdAndGId" resultType="SpuAttrValueEntity">
+        select b.* from pms_attr a INNER JOIN pms_spu_attr_value b on a.id=b.attr_id where b.spu_id=#{spuId} and a.group_id=#{groupId}
+    </select>
 </mapper>
