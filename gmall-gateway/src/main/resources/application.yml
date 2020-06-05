@@ -40,7 +40,7 @@ spring:
         - id: item-route # 异步获取数据的路由
           uri: lb://item-service
           predicates:
-            - Path=/item/**
+            - Host=item.gmall.com
     nacos:
       discovery:
         server-addr: localhost:8848
