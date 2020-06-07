@@ -37,10 +37,16 @@ spring:
           uri: lb://index-service
           predicates:
             - Path=/index/**
-        - id: item-route # 异步获取数据的路由
+        - id: item-route
           uri: lb://item-service
           predicates:
             - Host=item.gmall.com
+        - id: auth-route
+          uri: lb://auth-service
+          predicates:
+            - Host=sso.gmall.com
+      x-forwarded:
+        host-enabled: true
     nacos:
       discovery:
         server-addr: localhost:8848

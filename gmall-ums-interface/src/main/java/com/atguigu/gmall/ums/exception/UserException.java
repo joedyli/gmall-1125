@@ -1,4 +1,4 @@
-package com.atguigu.gmall.ums.config;
+package com.atguigu.gmall.ums.exception;
 
 public class UserException extends RuntimeException {
 

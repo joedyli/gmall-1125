@@ -164,9 +164,9 @@ public final class CookieUtils {
 			domainName = "";
 		} else {
 			serverName = serverName.toLowerCase();
-//			serverName = serverName.substring(7);
-//			final int end = serverName.indexOf("/");
-//			serverName = serverName.substring(0, end);
+			// serverName = serverName.substring(7);
+			// final int end = serverName.indexOf("/");
+			// serverName = serverName.substring(0, end);
 			final String[] domains = serverName.split("\\.");
 			int len = domains.length;
 			if (len > 3) {

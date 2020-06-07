@@ -1,12 +1,11 @@
 package com.atguigu.gmall.ums.service.impl;
 
-import com.atguigu.gmall.ums.config.UserException;
+import com.atguigu.gmall.ums.exception.UserException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -72,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Override
     public UserEntity queryUser(String username, String password) {
         // 1.先根据用户名查询出用户信息
-        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username", username));
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username", username).or().eq("phone", username).or().eq("email", username));
         if (userEntity == null) {
             throw new UserException("用户名输入不合法！！");
         }
