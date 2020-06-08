@@ -45,8 +45,17 @@ spring:
           uri: lb://auth-service
           predicates:
             - Host=sso.gmall.com
+        - id: cart-route
+          uri: lb://cart-service
+          predicates:
+            - Host=cart.gmall.com
+#          filters: 即使未登录也可以添加购物车
+#            - Auth=/
       x-forwarded:
         host-enabled: true
     nacos:
       discovery:
         server-addr: localhost:8848
+jwt: # 请自己完成配置到配置中心
+  pubKeyPath: D:\project-1125\rsa\rsa.pub
+  cookieName: GMALL-TOKEN

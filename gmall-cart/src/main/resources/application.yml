@@ -1,5 +1,5 @@
 server:
-  port: 18089
+  port: 18090
 spring:
   cloud:
     nacos:
@@ -19,13 +19,22 @@ spring:
       probability: 1
   thymeleaf:
     cache: false
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.16.116.100:3306/guli_cart
+    username: root
+    password: root
+  redis:
+    host: 172.16.116.100
 feign:
   sentinel:
     enabled: true
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  type-aliases-package: com.atguigu.gmall.cart.bean
 jwt: # 请自己完成配置到配置中心
   pubKeyPath: D:\project-1125\rsa\rsa.pub
-  priKeyPath: D:\project-1125\rsa\rsa.pri
-  secret: 23408sldjfdslDSLDJS23432sdl#()##@dlsjfdsl34
-  expire: 240
   cookieName: GMALL-TOKEN
-  unick: unick
+  userKey: userKey
