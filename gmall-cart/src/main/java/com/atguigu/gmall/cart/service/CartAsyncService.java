@@ -28,4 +28,9 @@ public class CartAsyncService {
     public void deleteCartByUserId(String userId) {
         this.cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", userId));
     }
+
+    @Async
+    public void deleteCartByUserIdAndSkuId(String userId, Long skuId) {
+        this.cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", userId).eq("sku_id", skuId));
+    }
 }

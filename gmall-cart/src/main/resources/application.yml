@@ -38,6 +38,15 @@ spring:
       shutdown:
         await-termination: true
         await-termination-period: 90
+  rabbitmq:
+    host: 172.16.116.100
+    virtual-host: /fengge
+    username: fengge
+    password: fengge
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
 feign:
   sentinel:
     enabled: true

@@ -9,7 +9,7 @@
 	<link rel="icon" href="http://static.gmall.com/img/favicon.ico">
 
 	<!-- 引入样式 -->
-	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 	<link rel="stylesheet" type="text/css" href="http://static.gmall.com/css/all.css" />
 	<link rel="stylesheet" type="text/css" href="http://static.gmall.com/css/pages-cart.css" />
 	<script type="text/javascript" src="http://static.gmall.com/js/plugins/jquery/jquery.min.js"></script>
@@ -66,6 +66,7 @@
 								</li>
 								<li class="yui3-u-1-8">
 									<span class="price">{{cart.price}}</span>
+									<span class="price">{{cart.currentPrice}}</span>
 								</li>
 								<li class="yui3-u-1-8">
 									<a href="javascript:void(0)" @click="decr(cart)" class="increment mins">-</a>
@@ -292,7 +293,7 @@
 			},
 			computed: {
 				totalCount(){
-					return this.carts.reduce((a, b) => a + b.count, 0)
+					return this.carts.reduce((a, b) => parseInt(a) + parseInt(b.count), 0)
 				},
 				totalMoney(){
 					return this.carts.reduce((a, b) => a + b.count * b.price, 0)

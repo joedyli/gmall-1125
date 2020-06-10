@@ -54,6 +54,7 @@ public class CartService {
     private StringRedisTemplate redisTemplate;
 
     private static final String KEY_PREFIX = "cart:info:";
+    private static final String PRICE_PREFIX = "cart:price:";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -102,6 +103,9 @@ public class CartService {
                 ResponseVo<List<ItemSaleVo>> saleResponseVo = this.smsClient.querySaleVosBySkuId(cart.getSkuId());
                 List<ItemSaleVo> itemSaleVos = saleResponseVo.getData();
                 cart.setSales(MAPPER.writeValueAsString(itemSaleVos));
+
+                // 新增购物车时，添加实时价格的缓存
+                this.redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, skuEntity.getPrice().toString());
 
                 // 保存到mysql + redis
                 this.cartAsyncService.saveCart(cart);
@@ -164,7 +168,10 @@ public class CartService {
         if (!CollectionUtils.isEmpty(cartJsons)){
             unloginCarts = cartJsons.stream().map(cartJson -> {
                 try {
-                    return MAPPER.readValue(cartJson.toString(), Cart.class);
+                    Cart cart = MAPPER.readValue(cartJson.toString(), Cart.class);
+                    // 查询购物车商品的实时价格
+                    cart.setCurrentPrice(new BigDecimal(this.redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId())));
+                    return cart;
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
@@ -216,7 +223,10 @@ public class CartService {
         if (!CollectionUtils.isEmpty(loginCartJsons)){
             return loginCartJsons.stream().map(loginCartJson -> {
                 try {
-                    return MAPPER.readValue(loginCartJson.toString(), Cart.class);
+                    Cart cart = MAPPER.readValue(loginCartJson.toString(), Cart.class);
+                    // 查询商品的实时价格
+                    cart.setCurrentPrice(new BigDecimal(this.redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId())));
+                    return cart;
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
@@ -224,6 +234,41 @@ public class CartService {
             }).collect(Collectors.toList());
         }
         return null;
+    }
+
+    public void updateNum(Cart cart) {
+        String userId = this.getUserId();
+        String key = KEY_PREFIX + userId;
+
+        // 获取该用户的所有购物车
+        BoundHashOperations<String, Object, Object> hashOps = this.redisTemplate.boundHashOps(key);
+        // 判断该用户的购物车中是否包含该条信息
+        if (hashOps.hasKey(cart.getSkuId().toString())){
+            try {
+                BigDecimal count = cart.getCount(); // 页面传递的要更新的数量
+                String cartJson = hashOps.get(cart.getSkuId().toString()).toString();
+                cart = MAPPER.readValue(cartJson, Cart.class);
+                cart.setCount(count);
+                // 更新到mysql及redis
+                this.cartAsyncService.updateCartByUserIdAndSkuId(cart, userId);
+                hashOps.put(cart.getSkuId().toString(), MAPPER.writeValueAsString(cart));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteCart(Long skuId) {
+        String userId = this.getUserId();
+        String key = KEY_PREFIX + userId;
+
+        // 获取该用户的所有购物车
+        BoundHashOperations<String, Object, Object> hashOps = this.redisTemplate.boundHashOps(key);
+        // 判断该用户的购物车中是否包含该条信息
+        if (hashOps.hasKey(skuId.toString())){
+            this.cartAsyncService.deleteCartByUserIdAndSkuId(userId, skuId);
+            hashOps.delete(skuId.toString());
+        }
     }
 
     @Async
@@ -259,4 +304,22 @@ public class CartService {
     }
 
 
+    public List<Cart> queryCheckedCartsByUserId(Long userId) {
+        String key = KEY_PREFIX + userId;
+
+        BoundHashOperations<String, Object, Object> hashOps = this.redisTemplate.boundHashOps(key);
+        List<Object> cartJsons = hashOps.values();
+        if (!CollectionUtils.isEmpty(cartJsons)){
+            return cartJsons.stream().map(cartJson -> {
+                try {
+                    return MAPPER.readValue(cartJson.toString(), Cart.class);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                return null;
+                // 筛选出选中状态的购物车
+            }).filter(Cart::getCheck).collect(Collectors.toList());
+        }
+        return null;
+    }
 }
