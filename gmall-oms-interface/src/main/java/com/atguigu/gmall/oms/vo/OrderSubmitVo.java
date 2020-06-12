@@ -1,4 +1,4 @@
-package com.atguigu.gmall.order.vo;
+package com.atguigu.gmall.oms.vo;
 
 import com.atguigu.gmall.ums.entity.UserAddressEntity;
 import lombok.Data;
@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class OrderSubmitVo {
+    private Long userId; // 用户id
     private String orderToken; // 防重
     private UserAddressEntity address; // 用户选中的地址信息
     private Integer payType; // 支付方式

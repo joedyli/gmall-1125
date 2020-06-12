@@ -1,11 +1,8 @@
-package com.atguigu.gmall.order.vo;
+package com.atguigu.gmall.oms.vo;
 
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.sms.vo.ItemSaleVo;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.condition.ConditionMessage;
 
 import java.math.BigDecimal;
 import java.util.List;
