@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * 支付信息表
- * 
+ *
  * @author fengge
  * @email fengge@atguigu.com
  * @date 2020-06-12 10:40:49
@@ -48,7 +48,7 @@ public class PaymentInfoEntity implements Serializable {
 	/**
 	 * 支付状态
 	 */
-	private String paymentStatus;
+	private Integer paymentStatus;
 	/**
 	 * 创建时间
 	 */

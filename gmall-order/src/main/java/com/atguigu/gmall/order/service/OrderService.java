@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -133,7 +134,7 @@ public class OrderService {
         return confirmVo;
     }
 
-    public void submit(OrderSubmitVo submitVo) {
+    public OrderEntity submit(OrderSubmitVo submitVo) {
         // 1.防重。查询redis是否包含当前页面提交orderToken，如果包含立马删除并放行
         String orderToken = submitVo.getOrderToken();
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] " +
@@ -175,12 +176,15 @@ public class OrderService {
             throw new OrderException("订单锁定失败：" + JSON.toJSONString(skuLockVos));
         }
 
+//        int i = 1/0;
+
         // 4.新增订单
         UserInfo userInfo = LoginInterceptor.getUserInfo();
+        OrderEntity orderEntity = null;
         try {
             submitVo.setUserId(userInfo.getUserId());
             ResponseVo<OrderEntity> orderEntityResponseVo = this.omsClient.saveOrder(submitVo);
-            OrderEntity orderEntity = orderEntityResponseVo.getData();
+            orderEntity = orderEntityResponseVo.getData();
         } catch (Exception e) {
             e.printStackTrace();
             // 订单创建失败，应该立马发送消息给wms解锁库存信息
@@ -194,5 +198,6 @@ public class OrderService {
         List<Long> skuIds = items.stream().map(OrderItemVo::getSkuId).collect(Collectors.toList());
         map.put("skuIds", JSON.toJSONString(skuIds));
         this.rabbitTemplate.convertAndSend("ORDER_EXCHANGE", "cart.delete", map);
+        return orderEntity;
     }
 }

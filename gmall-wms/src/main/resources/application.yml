@@ -33,6 +33,8 @@ spring:
       simple:
         acknowledge-mode: manual
         prefetch: 1
+    publisher-confirm-type: simple
+    publisher-returns: true
 feign:
   sentinel:
     enabled: true

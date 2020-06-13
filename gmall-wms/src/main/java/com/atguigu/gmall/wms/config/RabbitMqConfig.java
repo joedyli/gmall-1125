@@ -1,4 +1,4 @@
-package com.atguigu.gmall.oms.config;
+package com.atguigu.gmall.wms.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
@@ -47,29 +47,21 @@ public class RabbitMqConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
     @Bean
     public Queue ttlQueue(){
         Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-message-ttl", 90000);
+        arguments.put("x-message-ttl", 120000);
         arguments.put("x-dead-letter-exchange", "ORDER_EXCHANGE");
-        arguments.put("x-dead-letter-routing-key", "order.dead");
-        return new Queue("ORDER_TTL_QUEUE", true, false, false, arguments);
+        arguments.put("x-dead-letter-routing-key", "stock.unlock");
+        return new Queue("WMS_TTL_QUEUE", true, false, false, arguments);
     }
 
     // 3. 延迟队列绑定到业务交换机
     @Bean
     public Binding ttlBinding(){
-        return new Binding("ORDER_TTL_QUEUE", Binding.DestinationType.QUEUE, "ORDER_EXCHANGE", "order.ttl", null);
+        return new Binding("WMS_TTL_QUEUE", Binding.DestinationType.QUEUE, "ORDER_EXCHANGE", "stock.ttl", null);
     }
 
     // 4. 死信交换机：普通交换机（ORDER_EXCHANGE）
 
-    // 5. 死信队列：普通队列（放入了死信消息）
-    @Bean
-    public Queue deadQueue(){
-        return new Queue("ORDER_DEAD_QUEUE", true, false, false);
-    }
+    // 5. 死信队列：普通队列（ORDER_STOCK_QUEUE）
 
-    // 6. 死信队列绑定到死信交换机
-    @Bean
-    public Binding deadBinding(){
-        return new Binding("ORDER_DEAD_QUEUE", Binding.DestinationType.QUEUE, "ORDER_EXCHANGE", "order.dead", null);
-    }
+    // 6. 死信队列绑定到死信交换机(已绑定)
 }

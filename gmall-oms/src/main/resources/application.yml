@@ -36,6 +36,7 @@ spring:
     listener:
       simple:
         prefetch: 1
+        acknowledge-mode: manual
 feign:
   sentinel:
     enabled: true

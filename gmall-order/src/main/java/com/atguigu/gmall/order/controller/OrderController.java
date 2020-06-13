@@ -1,6 +1,7 @@
 package com.atguigu.gmall.order.controller;
 
 import com.atguigu.gmall.common.bean.ResponseVo;
+import com.atguigu.gmall.oms.entity.OrderEntity;
 import com.atguigu.gmall.oms.vo.OrderSubmitVo;
 import com.atguigu.gmall.order.service.OrderService;
 import com.atguigu.gmall.order.vo.OrderConfirmVo;
@@ -28,8 +29,11 @@ public class OrderController {
     @PostMapping("submit")
     @ResponseBody
     public ResponseVo<Object> submit(@RequestBody OrderSubmitVo submitVo){
-        this.orderService.submit(submitVo);
-        return ResponseVo.ok();
+        OrderEntity orderEntity = this.orderService.submit(submitVo);
+        if (orderEntity == null){
+            return ResponseVo.fail("服务器错误，订单创建失败！");
+        }
+        return ResponseVo.ok(orderEntity.getOrderSn());
     }
 
 }

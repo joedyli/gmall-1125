@@ -13,6 +13,8 @@ import com.atguigu.gmall.pms.entity.SpuDescEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
 import com.atguigu.gmall.ums.entity.UserAddressEntity;
 import com.atguigu.gmall.ums.entity.UserEntity;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
 
     @Autowired
     private OrderItemMapper itemMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -128,6 +133,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
             this.itemMapper.insert(itemEntity);
         });
 //        int i = 1/0;
+
+        // 在订单创建完成之后，返回之前发送消息定时关单
+        this.rabbitTemplate.convertAndSend("ORDER_EXCHANGE", "order.ttl", submitVo.getOrderToken());
+
         return orderEntity;
     }
 
